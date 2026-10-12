@@ -1,0 +1,35 @@
+project: mlb-bayesian-true-talent-projections
+state: PROOF RUN
+final_test_runs: 1
+data:
+  source: Lahman Batting + People via https://github.com/cdalzell/Lahman (CC BY-SA 3.0), seasons 1997-2025
+  player_seasons: 26340
+protocol:
+  dev_targets: [2010, 2011, 2012, 2013, 2014]
+  backtest_targets: [2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024, 2025]
+  scored: hitters with 200+ PA in T and T+1, PA-weighted
+  player_seasons_scored_per_stat: 2528
+claims:
+  - id: rmse_vs_naive
+    text: PA-weighted RMSE 7.8% (K%), 13.4% (BB%), 14.2% (HR per PA) lower than last-season rates over 10 held-out seasons
+    source: reports/results_eval.csv (pct_vs_naive)
+  - id: rmse_vs_marcel
+    text: within 1.3% of Marcel on every stat (K% 1.3% lower, BB% 0.3% higher, HR 0.9% higher), all 95% CIs include zero
+    source: reports/results_eval.csv (pct_vs_marcel, vs_marcel_lo/hi)
+  - id: coverage
+    text: 80% intervals covered 76.9% (K%), 80.9% (BB%), 77.4% (HR) of actual next-season rates
+    source: reports/results_eval.csv (coverage80)
+  - id: convergence
+    text: 30 backtest fits, max R-hat 1.010, min bulk ESS 2104, 0 divergences
+    source: reports/diagnostics_eval.csv
+  - id: stabilization
+    text: implied stabilization 51 / 119 / 164 PA for K% / BB% / HR
+    source: reports/stabilization.csv
+  - id: drift_dev
+    text: no-drift dev coverage 68.8 / 71.5 / 79.0%; drift tau 0.10 / 0.15 / 0.10 chosen on dev
+    source: reports/drift_calibration_dev.csv
+not_claimed:
+  - beating Marcel
+  - Statcast, park, or minor-league inputs
+  - R / Stan / brms (stretch, not built)
+  - live demo
