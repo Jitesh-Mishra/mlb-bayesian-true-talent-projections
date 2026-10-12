@@ -134,4 +134,7 @@ def main(phase: str):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "dev")
+    phase = sys.argv[1] if len(sys.argv) > 1 else ""
+    if phase not in ("dev", "eval"):
+        sys.exit("usage: python -m mlbproj.evaluate dev|eval   (eval is the backtest and is logged)")
+    main(phase)
